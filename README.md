@@ -1,36 +1,231 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# betaReadr
 
-## Getting Started
+**AI feedback without AI ghostwriting.**
 
-First, run the development server:
+betaReadr gives writers thoughtful, workshop-style feedback on their
+writing — fiction, novel chapters, essays, memoir, poetry, blog posts,
+LinkedIn posts, professional writing, and more. It identifies what's
+working, what's unclear, and where a piece could get stronger, without
+rewriting the work for you.
+
+## Product philosophy
+
+betaReadr is built around one idea: **AI feedback without AI
+ghostwriting.**
+
+The AI reviewer will:
+
+- Identify meaningful strengths, with real explanation, not token praise
+- Identify weaknesses and revision opportunities, framed constructively
+- Describe how a reader is likely to experience the piece
+- Ask questions worth sitting with as you revise
+- Prioritize the handful of changes that would help most
+
+The AI reviewer will **not**:
+
+- Rewrite your submission
+- Generate a replacement draft
+- Smooth your writing into something generic
+- Take ownership of your voice
+
+The goal is to help writers see and improve their own work — not to
+write it for them.
+
+## Who it's for
+
+Authors and writers seeking honest, constructive critique on writing
+they're still working on: novelists, essayists, memoirists, poets,
+bloggers, and professional writers.
+
+## MVP user flow
+
+1. Land on the homepage and understand what betaReadr does.
+2. Click **Get Feedback**.
+3. Paste writing or upload a `.txt`, `.md`, or `.docx` file.
+4. Optionally add a title, writing type, context, and what you'd like
+   feedback on.
+5. Choose a feedback persona (reader type).
+6. Submit and watch an engaged loading state.
+7. Read structured, editorial-style feedback.
+8. Edit and resubmit, or start a new review.
+
+There is no account system, no saved history, and no payments in this
+version — see [Roadmap](#roadmap-not-built-yet) below.
+
+## Tech stack
+
+- [Next.js](https://nextjs.org) (App Router) + TypeScript + React
+- CSS Modules (no Tailwind, no styled-components)
+- [OpenAI Node SDK](https://github.com/openai/openai-node) with
+  structured outputs (Zod schema via the Responses API)
+- [Zod](https://zod.dev) for request/response validation
+- [mammoth](https://github.com/mwilliamson/mammoth.js) for `.docx` text
+  extraction (client-side)
+- [Vitest](https://vitest.dev) + Testing Library for tests
+- Deployable to [Vercel](https://vercel.com) with no custom server
+
+## Local setup
 
 ```bash
+npm install
+cp .env.example .env.local
+# then edit .env.local and add your OpenAI API key
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Set these in `.env.local` for local development, and in your hosting
+provider's dashboard (e.g. Vercel) for deployed environments.
 
-## Learn More
+| Variable         | Required | Description                                                              |
+| ---------------- | -------- | -------------------------------------------------------------------------- |
+| `OPENAI_API_KEY` | Yes      | Your OpenAI API key. Kept server-side only — never exposed to the browser. |
+| `OPENAI_MODEL`   | No       | Overrides the default model (`gpt-4.1-mini`) used to generate feedback.    |
 
-To learn more about Next.js, take a look at the following resources:
+`.env.local` is already covered by `.gitignore` — never commit real
+API keys.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Development commands
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run dev        # start the dev server
+npm run build      # production build
+npm run start      # run the production build locally
+npm run lint       # ESLint
+npx tsc --noEmit   # TypeScript type checking
+```
 
-## Deploy on Vercel
+## Testing
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npm run test        # run the test suite once
+npm run test:watch  # watch mode
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Tests cover: submission validation (empty/short/long/missing fields),
+supported upload file types, persona and writing-type configuration,
+the structured feedback schema (including the requirement that every
+review includes at least one strength and one weakness), the
+`/api/review` route's error handling (validation errors, rate limits,
+missing configuration, unexpected errors — all mapped to safe,
+non-technical messages), and feedback rendering.
+
+## How document uploads work
+
+Uploads are parsed entirely in the browser, so file content is only
+sent to the server as extracted plain text alongside the rest of the
+form submission:
+
+- `.txt` and `.md` are read directly via the File API.
+- `.docx` is parsed client-side with mammoth's browser build
+  (`mammoth/mammoth.browser`), which extracts raw text from the
+  document's XML.
+- PDF is not supported in the MVP.
+
+Switching between "paste text" and "upload a document" does not
+discard whatever you've already entered in the other mode — each is
+kept in its own state, and only the active method's content is
+submitted.
+
+## Project structure
+
+```text
+app/
+  api/review/route.ts   # POST endpoint that calls OpenAI and validates the response
+  privacy/, terms/       # legal pages
+  review/                # review workspace (form -> loading -> result/error)
+  layout.tsx, page.tsx   # root layout and landing page
+  robots.ts, sitemap.ts  # SEO
+
+components/
+  FeedbackDisplay/       # renders structured feedback
+  FeedbackForm/          # the review submission form
+  Header/, Footer/
+  LoadingState/          # rotating loading messages
+  PersonaSelector/
+  SubmissionInput/       # paste/upload toggle + file extraction
+  landing/               # landing page sections
+
+lib/
+  analytics.ts           # typed, no-op analytics abstraction
+  openai.ts              # OpenAI client + structured feedback generation
+  prompts.ts             # system + persona prompt composition
+  reviewTypes.ts         # shared UI options + submission limits
+  validation.ts          # shared client/server submission validation
+
+types/
+  review.ts              # Zod schemas + shared request/response types
+```
+
+## Current MVP limitations
+
+- No accounts, no saved review history — each visit starts fresh.
+- No payments or usage limits.
+- Only one persona reviews a submission at a time (the data model
+  supports adding more personas or multiple simultaneous reviews
+  later).
+- 25,000 character maximum per submission (configurable in
+  `lib/reviewTypes.ts`).
+- `.txt`, `.md`, and `.docx` uploads only — no PDF support yet.
+- No AI chat or follow-up conversation about a review.
+- Privacy and Terms pages are placeholder MVP language and have not
+  been reviewed by a lawyer.
+
+## Roadmap (not built yet)
+
+Accounts and authentication · saved submissions and review history ·
+multiple personas reviewing one piece · side-by-side feedback from
+different readers · comments on specific passages · longer manuscripts
+and chapter-by-chapter projects · subscription plans and usage limits ·
+payments via Stripe · a human beta-reader marketplace · shared
+workshop groups · classroom workspaces · export to PDF/document
+formats · follow-up questions about feedback · writer progress
+tracking · private team workspaces · reader profiles · custom feedback
+personas.
+
+## Creating the GitHub repository and pushing
+
+These commands are not run automatically — review and run them
+yourself:
+
+```bash
+git add .
+git commit -m "Build betaReadr MVP"
+
+# Using the GitHub CLI:
+gh repo create beta-readr --private --source=. --remote=origin --push
+
+# Or, without the GitHub CLI:
+# 1. Create an empty repository named "beta-readr" at github.com/new
+# 2. Then:
+git remote add origin https://github.com/<your-username>/beta-readr.git
+git branch -M main
+git push -u origin main
+```
+
+## Deploying to Vercel
+
+### Option A: Vercel dashboard
+
+1. Import the `beta-readr` GitHub repository at
+   [vercel.com/new](https://vercel.com/new).
+2. Set the `OPENAI_API_KEY` environment variable (required).
+3. Optionally set `OPENAI_MODEL`.
+4. Deploy.
+
+### Option B: Vercel CLI
+
+```bash
+npm i -g vercel@latest
+vercel link
+vercel env add OPENAI_API_KEY
+vercel env add OPENAI_MODEL   # optional
+vercel deploy                 # preview deployment
+vercel deploy --prod          # production deployment
+```
+
+No custom server or extra infrastructure is needed — `/api/review`
+runs as a standard Next.js Route Handler on the Node.js runtime.

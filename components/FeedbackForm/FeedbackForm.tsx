@@ -1,0 +1,243 @@
+"use client";
+
+import { useMemo, useState } from "react";
+import {
+  WRITING_TYPE_OPTIONS,
+  SUBMISSION_LIMITS,
+} from "@/lib/reviewTypes";
+import { validateSubmission, type ValidationIssue } from "@/lib/validation";
+import { track } from "@/lib/analytics";
+import type { Persona, ReviewRequest, WritingType } from "@/types/review";
+import {
+  SubmissionInput,
+  type SubmissionValue,
+} from "@/components/SubmissionInput/SubmissionInput";
+import { PersonaSelector } from "@/components/PersonaSelector/PersonaSelector";
+import styles from "./FeedbackForm.module.css";
+
+export type FeedbackFormValues = {
+  title: string;
+  writingType: WritingType | "";
+  context: string;
+  requestedFocus: string;
+  persona: Persona | "";
+  submission: SubmissionValue;
+};
+
+export const EMPTY_FORM_VALUES: FeedbackFormValues = {
+  title: "",
+  writingType: "",
+  context: "",
+  requestedFocus: "",
+  persona: "",
+  submission: { method: "paste", pastedText: "", file: null },
+};
+
+type Props = {
+  initialValues: FeedbackFormValues;
+  isSubmitting: boolean;
+  submitError?: string | null;
+  onSubmit: (values: FeedbackFormValues, request: ReviewRequest) => void;
+};
+
+function effectiveText(submission: SubmissionValue): string {
+  return submission.method === "paste"
+    ? submission.pastedText
+    : (submission.file?.extractedText ?? "");
+}
+
+export function FeedbackForm({
+  initialValues,
+  isSubmitting,
+  submitError,
+  onSubmit,
+}: Props) {
+  const [values, setValues] = useState<FeedbackFormValues>(initialValues);
+  const [errors, setErrors] = useState<ValidationIssue[]>([]);
+  const [warnings, setWarnings] = useState<ValidationIssue[]>([]);
+
+  const text = effectiveText(values.submission);
+  const charCount = text.length;
+  const overLimit = charCount > SUBMISSION_LIMITS.maxCharacters;
+
+  const errorByField = useMemo(() => {
+    const map: Partial<Record<ValidationIssue["field"], string>> = {};
+    for (const issue of errors) map[issue.field] = issue.message;
+    return map;
+  }, [errors]);
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+
+    const result = validateSubmission({
+      title: values.title || undefined,
+      writingType: values.writingType || undefined,
+      text,
+      context: values.context || undefined,
+      requestedFocus: values.requestedFocus || undefined,
+      persona: values.persona || undefined,
+    });
+
+    setErrors(result.errors);
+    setWarnings(result.warnings);
+
+    if (result.errors.length > 0) {
+      return;
+    }
+
+    track({
+      name: "review_submitted",
+      writingType: values.writingType,
+      persona: values.persona,
+      characterCount: charCount,
+    });
+
+    onSubmit(values, {
+      title: values.title || undefined,
+      writingType: values.writingType as WritingType,
+      text,
+      context: values.context || undefined,
+      requestedFocus: values.requestedFocus || undefined,
+      persona: values.persona as Persona,
+    });
+  }
+
+  return (
+    <form className={styles.form} onSubmit={handleSubmit} noValidate>
+      {errors.length > 0 && (
+        <div className={styles.errorSummary} role="alert">
+          <p className={styles.errorSummaryTitle}>
+            Please take a look at the following before submitting:
+          </p>
+          <ul>
+            {errors.map((issue) => (
+              <li key={issue.field}>{issue.message}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {submitError && (
+        <div className={styles.errorSummary} role="alert">
+          <p className={styles.errorSummaryTitle}>{submitError}</p>
+        </div>
+      )}
+
+      <div className={styles.field}>
+        <label htmlFor="title" className={styles.label}>
+          Title <span className={styles.optional}>(optional)</span>
+        </label>
+        <input
+          id="title"
+          type="text"
+          className={styles.input}
+          value={values.title}
+          maxLength={200}
+          onChange={(e) => setValues((v) => ({ ...v, title: e.target.value }))}
+        />
+      </div>
+
+      <div className={styles.field}>
+        <label htmlFor="writingType" className={styles.label}>
+          Type of writing<span aria-hidden="true"> *</span>
+        </label>
+        <select
+          id="writingType"
+          className={styles.select}
+          value={values.writingType}
+          aria-invalid={Boolean(errorByField.writingType)}
+          aria-describedby={errorByField.writingType ? "writingType-error" : undefined}
+          onChange={(e) =>
+            setValues((v) => ({
+              ...v,
+              writingType: e.target.value as WritingType,
+            }))
+          }
+        >
+          <option value="">Choose a type…</option>
+          {WRITING_TYPE_OPTIONS.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+        {errorByField.writingType && (
+          <p id="writingType-error" className={styles.fieldError} role="alert">
+            {errorByField.writingType}
+          </p>
+        )}
+      </div>
+
+      <div className={styles.field}>
+        <SubmissionInput
+          value={values.submission}
+          onChange={(submission) => setValues((v) => ({ ...v, submission }))}
+          error={errorByField.text}
+        />
+        <div className={styles.charCount} aria-live="polite">
+          {charCount.toLocaleString()} /{" "}
+          {SUBMISSION_LIMITS.maxCharacters.toLocaleString()} characters
+          {overLimit ? " — over the limit" : ""}
+        </div>
+        {warnings
+          .filter((w) => w.field === "text")
+          .map((w) => (
+            <p key={w.field} className={styles.warningText}>
+              {w.message}
+            </p>
+          ))}
+      </div>
+
+      <div className={styles.field}>
+        <label htmlFor="context" className={styles.label}>
+          Context <span className={styles.optional}>(optional)</span>
+        </label>
+        <p className={styles.helperText}>
+          Tell your beta reader anything they should know about the piece,
+          intended audience, or where it appears in a larger work.
+        </p>
+        <textarea
+          id="context"
+          className={styles.textareaSmall}
+          rows={3}
+          maxLength={2000}
+          value={values.context}
+          onChange={(e) => setValues((v) => ({ ...v, context: e.target.value }))}
+        />
+      </div>
+
+      <div className={styles.field}>
+        <label htmlFor="requestedFocus" className={styles.label}>
+          Anything you especially want feedback on?{" "}
+          <span className={styles.optional}>(optional)</span>
+        </label>
+        <p className={styles.helperText}>
+          For example: pacing, dialogue, clarity, tone, argument, the opening
+          paragraph, character motivation, structure, reader engagement.
+        </p>
+        <textarea
+          id="requestedFocus"
+          className={styles.textareaSmall}
+          rows={2}
+          maxLength={1000}
+          value={values.requestedFocus}
+          onChange={(e) =>
+            setValues((v) => ({ ...v, requestedFocus: e.target.value }))
+          }
+        />
+      </div>
+
+      <div className={styles.field}>
+        <PersonaSelector
+          value={values.persona}
+          onChange={(persona) => setValues((v) => ({ ...v, persona }))}
+          error={errorByField.persona}
+        />
+      </div>
+
+      <button type="submit" className={styles.submit} disabled={isSubmitting}>
+        {isSubmitting ? "Reading your work…" : "Get Feedback"}
+      </button>
+    </form>
+  );
+}

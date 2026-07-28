@@ -1,0 +1,146 @@
+.wrapper {
+  max-width: var(--container-reading);
+  margin-inline: auto;
+  padding: var(--space-8) var(--space-6) var(--space-24);
+}
+
+.actionsBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-bottom: var(--space-12);
+  padding-bottom: var(--space-6);
+  border-bottom: 1px solid var(--color-rule);
+}
+
+.actionButton {
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  background: transparent;
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-4);
+  cursor: pointer;
+}
+
+.actionButton:hover {
+  border-color: var(--color-ink);
+}
+
+.reviewedTitle {
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  color: var(--color-ink-muted);
+  margin-bottom: var(--space-8);
+}
+
+.section {
+  margin-bottom: var(--space-12);
+}
+
+.sectionHeading {
+  font-size: 1.375rem;
+  margin-bottom: var(--space-4);
+}
+
+.prose {
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--color-ink);
+}
+
+.prose + .prose {
+  margin-top: var(--space-3);
+}
+
+.itemList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.strengthItem,
+.weaknessItem {
+  padding-left: var(--space-5);
+  border-left: 3px solid var(--color-rule);
+}
+
+.strengthsSection .strengthItem {
+  border-left-color: var(--color-accent-blue);
+}
+
+.weaknessesSection .weaknessItem {
+  border-left-color: var(--color-accent-rust);
+}
+
+.itemTitle {
+  font-family: var(--font-ui);
+  font-size: 1.0625rem;
+  font-weight: 700;
+  margin-bottom: var(--space-2);
+}
+
+.example {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 0.9375rem;
+  color: var(--color-ink-muted);
+  margin-top: var(--space-2);
+}
+
+.priorityList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.priorityItem {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.priorityNumber {
+  flex-shrink: 0;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-accent-rust);
+  width: 2rem;
+}
+
+.questionList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  list-style: disc;
+  padding-left: var(--space-6);
+}
+
+.questionList li {
+  list-style: disc;
+}
+
+.encouragementSection {
+  border-top: 1px solid var(--color-rule);
+  padding-top: var(--space-8);
+}
+
+.encouragementText {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.25rem;
+  color: var(--color-ink);
+}
+
+@media print {
+  .actionsBar {
+    display: none;
+  }
+
+  .wrapper {
+    max-width: 100%;
+  }
+}
