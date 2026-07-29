@@ -83,10 +83,36 @@ provider's dashboard (e.g. Vercel) for deployed environments.
 | Variable         | Required | Description                                                              |
 | ---------------- | -------- | -------------------------------------------------------------------------- |
 | `OPENAI_API_KEY` | Yes      | Your OpenAI API key. Kept server-side only — never exposed to the browser. |
-| `OPENAI_MODEL`   | No       | Overrides the default model (`gpt-4.1-mini`) used to generate feedback.    |
+| `OPENAI_MODEL`   | No       | Overrides the default model (`gpt-4o-mini`) used to generate feedback. Must be a model your API key/project has access to — see [Troubleshooting](#troubleshooting). |
 
 `.env.local` is already covered by `.gitignore` — never commit real
 API keys.
+
+## Troubleshooting
+
+**Reviews fail with a generic error ("betaReadr couldn't generate
+feedback for this submission").** This is most often the OpenAI
+project tied to your API key not having access to the configured
+model. Not every API key/project has every model enabled — this is
+independent of `OPENAI_API_KEY` being valid.
+
+To check which models your key can use:
+
+```bash
+node -e '
+import("openai").then(async ({ default: OpenAI }) => {
+  const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  const list = await client.models.list();
+  console.log(list.data.map((m) => m.id).sort().join("\n"));
+});
+'
+```
+
+Then set `OPENAI_MODEL` in `.env.local` (and in Vercel's project
+environment variables for deployed environments) to one of the
+returned ids. Server logs (`console.error("[api/review] generation
+failed", ...)`) include the underlying provider error message to help
+diagnose this and similar issues without exposing it to the browser.
 
 ## Development commands
 

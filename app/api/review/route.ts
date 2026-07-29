@@ -54,18 +54,23 @@ export async function POST(req: Request) {
   } catch (err) {
     if (err instanceof ReviewGenerationError) {
       const status =
-        err.code === "missing-api-key" || err.code === "auth-error"
+        err.code === "missing-api-key" ||
+        err.code === "auth-error" ||
+        err.code === "model-access-denied"
           ? 500
           : err.code === "rate-limited"
             ? 429
             : err.code === "timeout"
               ? 504
               : 502;
-      // Log internally without the submitted writing content.
+      // Log internally without the submitted writing content. `cause` (when
+      // present) carries the underlying provider error message for
+      // diagnosing misconfiguration — never sent to the client.
       console.error("[api/review] generation failed", {
         code: err.code,
         writingType: result.data.writingType,
         persona: result.data.persona,
+        cause: err.cause instanceof Error ? err.cause.message : undefined,
       });
       return jsonError(err.message, status);
     }

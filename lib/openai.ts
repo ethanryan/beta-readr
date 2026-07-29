@@ -2,6 +2,7 @@ import OpenAI, {
   APIConnectionTimeoutError,
   APIError,
   AuthenticationError,
+  PermissionDeniedError,
   RateLimitError,
 } from "openai";
 import { zodTextFormat } from "openai/helpers/zod";
@@ -12,15 +13,15 @@ import {
 } from "@/types/review";
 import { buildReviewUserMessage, buildSystemMessage } from "@/lib/prompts";
 
-const DEFAULT_MODEL = "gpt-4.1-mini";
+const DEFAULT_MODEL = "gpt-4o-mini";
 const REQUEST_TIMEOUT_MS = 60_000;
 
-/** A safe-to-display error. `code` is for internal logging/telemetry only. */
+/** A safe-to-display error. `code` and `cause` are for internal logging only. */
 export class ReviewGenerationError extends Error {
   readonly code: string;
 
-  constructor(message: string, code: string) {
-    super(message);
+  constructor(message: string, code: string, cause?: unknown) {
+    super(message, cause !== undefined ? { cause } : undefined);
     this.name = "ReviewGenerationError";
     this.code = code;
   }
@@ -128,21 +129,32 @@ function toReviewGenerationError(err: unknown): ReviewGenerationError {
     );
   }
 
+  if (err instanceof PermissionDeniedError) {
+    return new ReviewGenerationError(
+      "betaReadr isn't configured to generate feedback yet. The site owner needs to check which model this API key has access to.",
+      "model-access-denied",
+      err,
+    );
+  }
+
   if (err instanceof APIError) {
     if (err.status && err.status >= 500) {
       return new ReviewGenerationError(
         "betaReadr's AI provider is temporarily unavailable. Please try again shortly.",
         "provider-error",
+        err,
       );
     }
     return new ReviewGenerationError(
       "betaReadr couldn't generate feedback for this submission. Please try again.",
       "api-error",
+      err,
     );
   }
 
   return new ReviewGenerationError(
     "Something went wrong while generating feedback. Please try again.",
     "unknown",
+    err,
   );
 }
