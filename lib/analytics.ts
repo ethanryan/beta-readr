@@ -1,12 +1,10 @@
+import posthog from "posthog-js";
+
 /**
- * Typed analytics abstraction. No provider is wired up yet — in production
- * this is a no-op, and in development it logs to the console so the event
- * shape can be verified. Swap the `track` implementation for a real
- * provider later without touching call sites.
+ * Typed analytics abstraction backed by PostHog.
  *
  * Never pass submitted writing content as an event property.
  */
-
 export type AnalyticsEvent =
   | { name: "landing_cta_clicked" }
   | { name: "review_started" }
@@ -25,8 +23,13 @@ export type AnalyticsEvent =
   | { name: "new_review_started" };
 
 export function track(event: AnalyticsEvent): void {
+  const { name, ...properties } = event;
+
   if (process.env.NODE_ENV !== "production") {
-    console.info("[analytics]", event.name, event);
+    console.info("[analytics]", name, properties);
   }
-  // Intentionally a no-op in production until an analytics provider is added.
+
+  if (process.env.NEXT_PUBLIC_POSTHOG_KEY) {
+    posthog.capture(name, properties);
+  }
 }
