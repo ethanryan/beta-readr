@@ -56,21 +56,11 @@ export function validateSubmission(input: SubmissionInput): ValidationResult {
     });
   }
 
-  if (!input.writingType) {
-    errors.push({
-      field: "writingType",
-      message: "Choose the type of writing so feedback can be tailored to it.",
-    });
-  } else if (!WRITING_TYPES.includes(input.writingType as (typeof WRITING_TYPES)[number])) {
+  if (input.writingType && !WRITING_TYPES.includes(input.writingType as (typeof WRITING_TYPES)[number])) {
     errors.push({ field: "writingType", message: "Choose a writing type from the list." });
   }
 
-  if (!input.persona) {
-    errors.push({
-      field: "persona",
-      message: "Choose a feedback style.",
-    });
-  } else if (!PERSONAS.includes(input.persona as (typeof PERSONAS)[number])) {
+  if (input.persona && !PERSONAS.includes(input.persona as (typeof PERSONAS)[number])) {
     errors.push({ field: "persona", message: "Choose a feedback style from the list." });
   }
 

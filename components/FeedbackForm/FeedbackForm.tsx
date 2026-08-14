@@ -94,11 +94,11 @@ export function FeedbackForm({
 
     onSubmit(values, {
       title: values.title || undefined,
-      writingType: values.writingType as WritingType,
+      writingType: values.writingType || undefined,
       text,
       context: values.context || undefined,
       requestedFocus: values.requestedFocus || undefined,
-      persona: values.persona as Persona,
+      persona: values.persona || "supportive-writing-coach",
     });
   }
 
@@ -124,37 +124,6 @@ export function FeedbackForm({
       )}
 
       <div className={styles.field}>
-        <label htmlFor="writingType" className={styles.label}>
-          Type of writing<span aria-hidden="true"> *</span>
-        </label>
-        <select
-          id="writingType"
-          className={styles.select}
-          value={values.writingType}
-          aria-invalid={Boolean(errorByField.writingType)}
-          aria-describedby={errorByField.writingType ? "writingType-error" : undefined}
-          onChange={(e) =>
-            setValues((v) => ({
-              ...v,
-              writingType: e.target.value as WritingType,
-            }))
-          }
-        >
-          <option value="">Choose a type…</option>
-          {WRITING_TYPE_OPTIONS.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
-        {errorByField.writingType && (
-          <p id="writingType-error" className={styles.fieldError} role="alert">
-            {errorByField.writingType}
-          </p>
-        )}
-      </div>
-
-      <div className={styles.field}>
         <SubmissionInput
           value={values.submission}
           onChange={(submission) => setValues((v) => ({ ...v, submission }))}
@@ -174,42 +143,78 @@ export function FeedbackForm({
           ))}
       </div>
 
-      <div className={styles.field}>
-        <label htmlFor="requestedFocus" className={styles.label}>
-          Anything you especially want feedback on?{" "}
-          <span className={styles.optional}>(optional)</span>
-        </label>
-        <p className={styles.helperText}>
-          For example: pacing, dialogue, clarity, tone, argument, the opening
-          paragraph, character motivation, structure, reader engagement.
-        </p>
-        <textarea
-          id="requestedFocus"
-          className={styles.textareaSmall}
-          rows={2}
-          maxLength={1000}
-          value={values.requestedFocus}
-          onChange={(e) =>
-            setValues((v) => ({ ...v, requestedFocus: e.target.value }))
-          }
-        />
-      </div>
-
-      <div className={styles.field}>
-        <PersonaSelector
-          value={values.persona}
-          onChange={(persona) => setValues((v) => ({ ...v, persona }))}
-          error={errorByField.persona}
-        />
-      </div>
-
       <details className={styles.additionalDetails}>
         <summary className={styles.additionalDetailsSummary}>
-          Additional details <span className={styles.optional}>(optional)</span>
+          Customize your feedback <span className={styles.optional}>(optional)</span>
         </summary>
         <div className={styles.additionalDetailsFields}>
           <div className={styles.field}>
-            <label htmlFor="title" className={styles.label}>Title</label>
+            <label htmlFor="writingType" className={styles.label}>
+              Type of writing <span className={styles.optional}>(optional)</span>
+            </label>
+            <p className={styles.helperText}>
+              Leave this blank and betaReadr will make its best guess.
+            </p>
+            <select
+              id="writingType"
+              className={styles.select}
+              value={values.writingType}
+              aria-invalid={Boolean(errorByField.writingType)}
+              aria-describedby={errorByField.writingType ? "writingType-error" : undefined}
+              onChange={(e) =>
+                setValues((v) => ({
+                  ...v,
+                  writingType: e.target.value as WritingType,
+                }))
+              }
+            >
+              <option value="">Let betaReadr decide</option>
+              {WRITING_TYPE_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+            {errorByField.writingType && (
+              <p id="writingType-error" className={styles.fieldError} role="alert">
+                {errorByField.writingType}
+              </p>
+            )}
+          </div>
+
+          <div className={styles.field}>
+            <PersonaSelector
+              value={values.persona}
+              onChange={(persona) => setValues((v) => ({ ...v, persona }))}
+              error={errorByField.persona}
+            />
+          </div>
+
+          <div className={styles.field}>
+            <label htmlFor="requestedFocus" className={styles.label}>
+              Anything you especially want feedback on?{" "}
+              <span className={styles.optional}>(optional)</span>
+            </label>
+            <p className={styles.helperText}>
+              For example: pacing, dialogue, clarity, tone, argument, the opening
+              paragraph, character motivation, structure, reader engagement.
+            </p>
+            <textarea
+              id="requestedFocus"
+              className={styles.textareaSmall}
+              rows={2}
+              maxLength={1000}
+              value={values.requestedFocus}
+              onChange={(e) =>
+                setValues((v) => ({ ...v, requestedFocus: e.target.value }))
+              }
+            />
+          </div>
+
+          <div className={styles.field}>
+            <label htmlFor="title" className={styles.label}>
+              Title <span className={styles.optional}>(optional)</span>
+            </label>
             <input
               id="title"
               type="text"
@@ -220,7 +225,9 @@ export function FeedbackForm({
             />
           </div>
           <div className={styles.field}>
-            <label htmlFor="context" className={styles.label}>Context</label>
+            <label htmlFor="context" className={styles.label}>
+              Context <span className={styles.optional}>(optional)</span>
+            </label>
             <p className={styles.helperText}>
               Share the intended audience or where this appears in a larger work.
             </p>

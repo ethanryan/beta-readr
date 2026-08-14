@@ -65,18 +65,26 @@ describe("POST /api/review", () => {
     expect(res.status).toBe(400);
   });
 
-  it("returns 400 when writingType is missing", async () => {
+  it("infers the writing type when it is missing", async () => {
+    generateReview.mockResolvedValueOnce(sampleFeedback);
     const rest: Record<string, unknown> = { ...validBody };
     delete rest.writingType;
     const res = await POST(makeRequest(rest));
-    expect(res.status).toBe(400);
+    expect(res.status).toBe(200);
+    expect(generateReview).toHaveBeenCalledWith(
+      expect.objectContaining({ writingType: undefined }),
+    );
   });
 
-  it("returns 400 when persona is missing", async () => {
+  it("uses the supportive feedback style when persona is missing", async () => {
+    generateReview.mockResolvedValueOnce(sampleFeedback);
     const rest: Record<string, unknown> = { ...validBody };
     delete rest.persona;
     const res = await POST(makeRequest(rest));
-    expect(res.status).toBe(400);
+    expect(res.status).toBe(200);
+    expect(generateReview).toHaveBeenCalledWith(
+      expect.objectContaining({ persona: "supportive-writing-coach" }),
+    );
   });
 
   it("returns 200 with feedback on success", async () => {

@@ -81,11 +81,11 @@ export const PERSONA_INFO: Record<
 /** Request body sent from the review form to POST /api/review */
 export const ReviewRequestSchema = z.object({
   title: z.string().trim().max(200).optional(),
-  writingType: z.enum(WRITING_TYPES),
+  writingType: z.enum(WRITING_TYPES).optional(),
   text: z.string(),
   context: z.string().trim().max(2000).optional(),
   requestedFocus: z.string().trim().max(1000).optional(),
-  persona: z.enum(PERSONAS),
+  persona: z.enum(PERSONAS).default("supportive-writing-coach"),
 });
 
 export type ReviewRequest = z.infer<typeof ReviewRequestSchema>;
