@@ -14,7 +14,7 @@ export function PersonaSelector({ value, onChange, error }: Props) {
   return (
     <fieldset className={styles.fieldset}>
       <legend className={styles.legend}>
-        Choose your reader<span aria-hidden="true"> *</span>
+        Choose your feedback style<span aria-hidden="true"> *</span>
       </legend>
       <div className={styles.options} role="radiogroup" aria-describedby={error ? "persona-error" : undefined}>
         {PERSONA_OPTIONS.map((persona) => (
