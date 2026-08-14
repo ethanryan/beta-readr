@@ -7,18 +7,13 @@ export function Hero() {
       <div className={styles.inner}>
         <div className={styles.copy}>
           <p className={styles.eyebrow}>betaReadr</p>
-          <h1 className={styles.headline}>
-            Better feedback for <em>better writing</em>.
-          </h1>
+          <h1 className={styles.headline}>Better feedback for better writing.</h1>
           <p className={styles.support}>
-            Get thoughtful, workshop-style feedback on what is working, what
-            is unclear, and where your writing could become stronger.
+            Thoughtful, workshop-style feedback to help you strengthen your
+            writing without rewriting it for you.
           </p>
           <p className={styles.philosophy}>
             AI feedback without AI ghostwriting.
-          </p>
-          <p className={styles.trust}>
-            Constructive critique. Clear suggestions. Your voice stays yours.
           </p>
         </div>
         <QuickStart />
