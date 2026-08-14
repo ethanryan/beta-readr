@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   FeedbackForm,
   EMPTY_FORM_VALUES,
@@ -9,6 +9,7 @@ import {
 import { LoadingState } from "@/components/LoadingState/LoadingState";
 import { FeedbackDisplay } from "@/components/FeedbackDisplay/FeedbackDisplay";
 import { track } from "@/lib/analytics";
+import { readHomepageDraft } from "@/lib/draftTransfer";
 import type { ReviewApiResponse, ReviewFeedback, ReviewRequest } from "@/types/review";
 import styles from "./ReviewWorkspace.module.css";
 
@@ -20,6 +21,15 @@ export function ReviewWorkspace() {
   const [lastRequest, setLastRequest] = useState<ReviewRequest | null>(null);
   const [feedback, setFeedback] = useState<ReviewFeedback | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    const homepageDraft = readHomepageDraft();
+    if (homepageDraft) {
+      setFormValues((current) => ({ ...current, submission: homepageDraft }));
+    }
+    setIsReady(true);
+  }, []);
 
   async function submitRequest(request: ReviewRequest) {
     setView("loading");
@@ -75,7 +85,7 @@ export function ReviewWorkspace() {
 
   return (
     <div className={styles.wrapper}>
-      {view === "form" && (
+      {view === "form" && isReady && (
         <div className={styles.formContainer}>
           <h1 className={styles.heading}>Share your writing</h1>
           <p className={styles.subheading}>

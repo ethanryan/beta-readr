@@ -27,6 +27,7 @@ type Props = {
   value: SubmissionValue;
   onChange: (value: SubmissionValue) => void;
   error?: string;
+  compact?: boolean;
 };
 
 /**
@@ -34,7 +35,7 @@ type Props = {
  * methods never silently discards what the writer already entered — only
  * the active method's text is used on submit.
  */
-export function SubmissionInput({ value, onChange, error }: Props) {
+export function SubmissionInput({ value, onChange, error, compact = false }: Props) {
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [isExtracting, setIsExtracting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -139,7 +140,7 @@ export function SubmissionInput({ value, onChange, error }: Props) {
             value={value.pastedText}
             onChange={(e) => onChange({ ...value, pastedText: e.target.value })}
             placeholder="Paste your writing here…"
-            rows={16}
+            rows={compact ? 9 : 16}
             aria-invalid={Boolean(error)}
             aria-describedby={error ? `${pasteId}-error` : undefined}
           />

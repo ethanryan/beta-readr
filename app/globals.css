@@ -1,15 +1,15 @@
 /*
   betaReadr design tokens.
-  Palette is a "manuscript markup" concept: warm paper background, ink text,
+  Palette is a restrained editorial concept: soft white paper, ink text,
   a blue pencil accent for strengths/craft notes, and a rust pencil accent
   for revision notes — echoing how an editor actually marks up a page.
 */
 :root {
-  --color-paper: #f3eee4;
-  --color-paper-raised: #fbf8f2;
-  --color-ink: #211c16;
-  --color-ink-muted: #6b6357;
-  --color-rule: #d8cfbe;
+  --color-paper: #faf9f7;
+  --color-paper-raised: #ffffff;
+  --color-ink: #191816;
+  --color-ink-muted: #68645e;
+  --color-rule: #e3dfd8;
   --color-accent-blue: #2e4b6e;
   --color-accent-blue-strong: #1f3a57;
   --color-accent-blue-tint: rgba(46, 75, 110, 0.08);
