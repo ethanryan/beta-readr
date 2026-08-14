@@ -1,198 +1,13 @@
 .hero {
-  padding: var(--space-16) 0 var(--space-24);
+  padding: 5rem 0 var(--space-24);
   border-bottom: 1px solid var(--color-rule);
 }
 
 .inner {
+  width: 100%;
   max-width: var(--container-wide);
   margin-inline: auto;
   padding-inline: var(--space-6);
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-16);
-  align-items: center;
-}
-
-.copy {
-  max-width: 34rem;
-}
-
-.eyebrow {
-  font-family: var(--font-ui);
-  font-size: 0.8125rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--color-accent-blue);
-  margin-bottom: var(--space-4);
-}
-
-.headline {
-  font-size: clamp(2.25rem, 5vw, 3.25rem);
-  font-weight: 600;
-  color: var(--color-ink);
-}
-
-.headline em {
-  font-style: italic;
-  color: var(--color-accent-blue);
-}
-
-.support {
-  font-family: var(--font-body);
-  font-size: 1.1875rem;
-  color: var(--color-ink-muted);
-  margin-top: var(--space-6);
-  max-width: 32rem;
-}
-
-.philosophy {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: 1.25rem;
-  color: var(--color-ink);
-  margin-top: var(--space-8);
-  padding-left: var(--space-4);
-  border-left: 3px solid var(--color-accent-rust);
-}
-
-.actions {
-  margin-top: var(--space-8);
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-4);
-}
-
-.cta {
-  font-family: var(--font-ui);
-  font-weight: 600;
-  font-size: 1.0625rem;
-  color: var(--color-paper);
-  background: var(--color-ink);
-  padding: var(--space-3) var(--space-8);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-ink);
-  transition: background-color 0.15s ease, border-color 0.15s ease;
-}
-
-.cta:hover {
-  background: var(--color-accent-blue-strong);
-  border-color: var(--color-accent-blue-strong);
-}
-
-.trust {
-  font-family: var(--font-ui);
-  font-size: 0.875rem;
-  color: var(--color-ink-muted);
-}
-
-/* Signature element: an illustrative manuscript page with margin notes,
-   echoing an editor's actual pencil markup rather than a stock screenshot. */
-.manuscript {
-  justify-self: center;
-  width: 100%;
-  max-width: 26rem;
-}
-
-.manuscriptCaption {
-  font-family: var(--font-ui);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-ink-muted);
-  margin-bottom: var(--space-2);
-}
-
-.page {
-  background: var(--color-paper-raised);
-  border: 1px solid var(--color-rule);
-  border-radius: var(--radius-md);
-  padding: var(--space-6);
-  box-shadow: 0 1px 0 var(--color-rule);
-}
-
-.pageText {
-  font-family: var(--font-body);
-  font-size: 1.0625rem;
-  line-height: 1.7;
-  color: var(--color-ink);
-}
-
-.markStrength,
-.markWeakness {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.1rem;
-  height: 1.1rem;
-  font-family: var(--font-ui);
-  font-size: 0.6875rem;
-  font-weight: 700;
-  border-radius: 999px;
-  margin-left: 0.2em;
-  transform: translateY(-0.4em);
-}
-
-.markStrength {
-  color: var(--color-accent-blue);
-  border: 1.5px solid var(--color-accent-blue);
-}
-
-.markWeakness {
-  color: var(--color-accent-rust);
-  border: 1.5px solid var(--color-accent-rust);
-}
-
-.noteStrength,
-.noteWeakness {
-  font-family: var(--font-ui);
-  font-size: 0.875rem;
-  line-height: 1.5;
-  padding: var(--space-3) 0 var(--space-3) var(--space-4);
-  margin-top: var(--space-4);
-}
-
-.noteStrength {
-  border-left: 3px solid var(--color-accent-blue);
-  color: var(--color-ink);
-}
-
-.noteWeakness {
-  border-left: 3px solid var(--color-accent-rust);
-  color: var(--color-ink);
-}
-
-.noteLabel {
-  display: block;
-  font-weight: 700;
-  font-size: 0.75rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  margin-bottom: var(--space-1);
-}
-
-.noteStrength .noteLabel {
-  color: var(--color-accent-blue);
-}
-
-.noteWeakness .noteLabel {
-  color: var(--color-accent-rust);
-}
-
-@media (min-width: 900px) {
-  .inner {
-    grid-template-columns: 1.1fr 0.9fr;
-  }
-
-  .manuscript {
-    justify-self: end;
-  }
-}
-
-/* The product itself is the hero: center the promise and quick-start input. */
-.inner {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -200,14 +15,52 @@
 }
 
 .copy {
-  max-width: 42rem;
+  width: 100%;
+  max-width: 48rem;
   text-align: center;
 }
 
-.philosophy {
-  display: inline-block;
+.eyebrow {
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  margin-bottom: var(--space-4);
 }
 
-.trust {
-  margin-top: var(--space-6);
+.headline {
+  max-width: 46rem;
+  margin-inline: auto;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  color: var(--color-ink);
+}
+
+.support {
+  max-width: 39rem;
+  margin: var(--space-6) auto 0;
+  font-family: var(--font-ui);
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: var(--color-ink-muted);
+}
+
+.philosophy {
+  margin-top: var(--space-4);
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+@media (max-width: 600px) {
+  .hero {
+    padding-top: var(--space-12);
+  }
+
+  .inner {
+    padding-inline: var(--space-4);
+    gap: var(--space-8);
+  }
 }
