@@ -190,3 +190,24 @@
     justify-self: end;
   }
 }
+
+/* The product itself is the hero: center the promise and quick-start input. */
+.inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-12);
+}
+
+.copy {
+  max-width: 42rem;
+  text-align: center;
+}
+
+.philosophy {
+  display: inline-block;
+}
+
+.trust {
+  margin-top: var(--space-6);
+}
