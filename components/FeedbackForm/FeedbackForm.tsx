@@ -29,7 +29,7 @@ export const EMPTY_FORM_VALUES: FeedbackFormValues = {
   writingType: "",
   context: "",
   requestedFocus: "",
-  persona: "",
+  persona: "supportive-writing-coach",
   submission: { method: "paste", pastedText: "", file: null },
 };
 
@@ -124,20 +124,6 @@ export function FeedbackForm({
       )}
 
       <div className={styles.field}>
-        <label htmlFor="title" className={styles.label}>
-          Title <span className={styles.optional}>(optional)</span>
-        </label>
-        <input
-          id="title"
-          type="text"
-          className={styles.input}
-          value={values.title}
-          maxLength={200}
-          onChange={(e) => setValues((v) => ({ ...v, title: e.target.value }))}
-        />
-      </div>
-
-      <div className={styles.field}>
         <label htmlFor="writingType" className={styles.label}>
           Type of writing<span aria-hidden="true"> *</span>
         </label>
@@ -189,24 +175,6 @@ export function FeedbackForm({
       </div>
 
       <div className={styles.field}>
-        <label htmlFor="context" className={styles.label}>
-          Context <span className={styles.optional}>(optional)</span>
-        </label>
-        <p className={styles.helperText}>
-          Tell your beta reader anything they should know about the piece,
-          intended audience, or where it appears in a larger work.
-        </p>
-        <textarea
-          id="context"
-          className={styles.textareaSmall}
-          rows={3}
-          maxLength={2000}
-          value={values.context}
-          onChange={(e) => setValues((v) => ({ ...v, context: e.target.value }))}
-        />
-      </div>
-
-      <div className={styles.field}>
         <label htmlFor="requestedFocus" className={styles.label}>
           Anything you especially want feedback on?{" "}
           <span className={styles.optional}>(optional)</span>
@@ -234,6 +202,39 @@ export function FeedbackForm({
           error={errorByField.persona}
         />
       </div>
+
+      <details className={styles.additionalDetails}>
+        <summary className={styles.additionalDetailsSummary}>
+          Additional details <span className={styles.optional}>(optional)</span>
+        </summary>
+        <div className={styles.additionalDetailsFields}>
+          <div className={styles.field}>
+            <label htmlFor="title" className={styles.label}>Title</label>
+            <input
+              id="title"
+              type="text"
+              className={styles.input}
+              value={values.title}
+              maxLength={200}
+              onChange={(e) => setValues((v) => ({ ...v, title: e.target.value }))}
+            />
+          </div>
+          <div className={styles.field}>
+            <label htmlFor="context" className={styles.label}>Context</label>
+            <p className={styles.helperText}>
+              Share the intended audience or where this appears in a larger work.
+            </p>
+            <textarea
+              id="context"
+              className={styles.textareaSmall}
+              rows={3}
+              maxLength={2000}
+              value={values.context}
+              onChange={(e) => setValues((v) => ({ ...v, context: e.target.value }))}
+            />
+          </div>
+        </div>
+      </details>
 
       <button type="submit" className={styles.submit} disabled={isSubmitting}>
         {isSubmitting ? "Reading your work…" : "Get Feedback"}
