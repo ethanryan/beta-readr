@@ -21,7 +21,6 @@
 
 .tagline {
   font-size: clamp(1.9rem, 4.5vw, 2.75rem);
-  max-width: 42rem;
   font-style: italic;
   font-weight: 500;
 }
@@ -46,8 +45,6 @@
   font-size: 1.0625rem;
   font-family: var(--font-ui);
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
 }
 
 .list {
