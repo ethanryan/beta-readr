@@ -68,10 +68,10 @@ export function validateSubmission(input: SubmissionInput): ValidationResult {
   if (!input.persona) {
     errors.push({
       field: "persona",
-      message: "Choose a reader to give you feedback.",
+      message: "Choose a feedback style.",
     });
   } else if (!PERSONAS.includes(input.persona as (typeof PERSONAS)[number])) {
-    errors.push({ field: "persona", message: "Choose a persona from the list." });
+    errors.push({ field: "persona", message: "Choose a feedback style from the list." });
   }
 
   if (input.title && input.title.length > 200) {
