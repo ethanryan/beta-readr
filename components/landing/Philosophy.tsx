@@ -28,7 +28,7 @@ export function Philosophy() {
 
         <div className={styles.columns}>
           <div className={styles.column}>
-            <h3 className={styles.columnHeading}>betaReadr helps you</h3>
+            <h3 className={styles.columnHeading}>betaReadr helps writers</h3>
             <ul className={styles.list}>
               {DOES.map((item) => (
                 <li key={item} className={styles.listItemStrength}>

@@ -43,10 +43,20 @@ describe("InteractiveExamples", () => {
     expect(screen.getByRole("button", { name: /tagore/i })).toBeInTheDocument();
   });
 
+  it("shows complete poems", () => {
+    render(<InteractiveExamples />);
+
+    fireEvent.click(screen.getByRole("button", { name: /tagore/i }));
+
+    expect(screen.getByText("The complete poem")).toBeInTheDocument();
+    expect(screen.getByText(/let my country awake/i)).toBeInTheDocument();
+  });
+
   it("carries the selected writing into the review workspace", () => {
     render(<InteractiveExamples />);
 
     fireEvent.click(screen.getByRole("button", { name: /hemingway/i }));
+    expect(screen.getByText("The complete story")).toBeInTheDocument();
     fireEvent.click(
       screen.getByRole("button", { name: /try this writing yourself/i }),
     );
@@ -55,6 +65,15 @@ describe("InteractiveExamples", () => {
       sessionStorage.getItem(HOMEPAGE_DRAFT_KEY) ?? "{}",
     );
     expect(savedDraft.pastedText).toContain("white elephants");
+    expect(savedDraft.pastedText).toContain("There’s nothing wrong with me");
     expect(push).toHaveBeenCalledWith("/review");
+  });
+
+  it("shows the first five paragraphs from Passing", () => {
+    render(<InteractiveExamples />);
+
+    fireEvent.click(screen.getByRole("button", { name: /larsen/i }));
+
+    expect(screen.getByText(/pathetic little red frock/i)).toBeInTheDocument();
   });
 });
