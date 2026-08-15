@@ -9,6 +9,9 @@ export function Header() {
           betaReadr
         </Link>
         <nav className={styles.nav} aria-label="Primary">
+          <Link href="/#examples" className={styles.navLink}>
+            Examples
+          </Link>
           <Link href="/#how-it-works" className={styles.navLink}>
             How it works
           </Link>
