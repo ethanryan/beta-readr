@@ -37,6 +37,8 @@ type Props = {
   initialValues: FeedbackFormValues;
   isSubmitting: boolean;
   submitError?: string | null;
+  submitLabel?: string;
+  onValuesChange?: (values: FeedbackFormValues) => void;
   onSubmit: (values: FeedbackFormValues, request: ReviewRequest) => void;
 };
 
@@ -50,6 +52,8 @@ export function FeedbackForm({
   initialValues,
   isSubmitting,
   submitError,
+  submitLabel = "Get Feedback",
+  onValuesChange,
   onSubmit,
 }: Props) {
   const [values, setValues] = useState<FeedbackFormValues>(initialValues);
@@ -59,6 +63,14 @@ export function FeedbackForm({
   const text = effectiveText(values.submission);
   const charCount = text.length;
   const overLimit = charCount > SUBMISSION_LIMITS.maxCharacters;
+
+  function updateValues(
+    update: (current: FeedbackFormValues) => FeedbackFormValues,
+  ) {
+    const next = update(values);
+    setValues(next);
+    onValuesChange?.(next);
+  }
 
   const errorByField = useMemo(() => {
     const map: Partial<Record<ValidationIssue["field"], string>> = {};
@@ -132,7 +144,9 @@ export function FeedbackForm({
       <div className={styles.field}>
         <SubmissionInput
           value={values.submission}
-          onChange={(submission) => setValues((v) => ({ ...v, submission }))}
+          onChange={(submission) =>
+            updateValues((current) => ({ ...current, submission }))
+          }
           error={errorByField.text}
         />
         <div className={styles.charCount} aria-live="polite">
@@ -168,8 +182,8 @@ export function FeedbackForm({
               aria-invalid={Boolean(errorByField.writingType)}
               aria-describedby={errorByField.writingType ? "writingType-error" : undefined}
               onChange={(e) =>
-                setValues((v) => ({
-                  ...v,
+                updateValues((current) => ({
+                  ...current,
                   writingType: e.target.value as WritingType,
                 }))
               }
@@ -191,7 +205,9 @@ export function FeedbackForm({
           <div className={styles.field}>
             <PersonaSelector
               value={values.persona}
-              onChange={(persona) => setValues((v) => ({ ...v, persona }))}
+              onChange={(persona) =>
+                updateValues((current) => ({ ...current, persona }))
+              }
               error={errorByField.persona}
             />
           </div>
@@ -212,7 +228,10 @@ export function FeedbackForm({
               maxLength={1000}
               value={values.requestedFocus}
               onChange={(e) =>
-                setValues((v) => ({ ...v, requestedFocus: e.target.value }))
+                updateValues((current) => ({
+                  ...current,
+                  requestedFocus: e.target.value,
+                }))
               }
             />
           </div>
@@ -227,7 +246,12 @@ export function FeedbackForm({
               className={styles.input}
               value={values.title}
               maxLength={200}
-              onChange={(e) => setValues((v) => ({ ...v, title: e.target.value }))}
+              onChange={(e) =>
+                updateValues((current) => ({
+                  ...current,
+                  title: e.target.value,
+                }))
+              }
             />
           </div>
           <div className={styles.field}>
@@ -243,14 +267,19 @@ export function FeedbackForm({
               rows={3}
               maxLength={2000}
               value={values.context}
-              onChange={(e) => setValues((v) => ({ ...v, context: e.target.value }))}
+              onChange={(e) =>
+                updateValues((current) => ({
+                  ...current,
+                  context: e.target.value,
+                }))
+              }
             />
           </div>
         </div>
       </details>
 
       <button type="submit" className={styles.submit} disabled={isSubmitting}>
-        {isSubmitting ? "Reading your work…" : "Get Feedback"}
+        {isSubmitting ? "Reading your work…" : submitLabel}
       </button>
     </form>
   );
