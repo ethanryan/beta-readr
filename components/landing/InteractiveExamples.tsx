@@ -167,7 +167,7 @@ export function InteractiveExamples() {
   }
 
   return (
-    <section className={styles.section} aria-labelledby="examples-heading">
+    <section\n      id="examples"\n      className={styles.section}\n      aria-labelledby="examples-heading"\n    >
       <div className={styles.inner}>
         <div className={styles.intro}>
           <p className={styles.eyebrow}>Example review</p>
