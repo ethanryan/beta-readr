@@ -45,12 +45,12 @@ describe("validateSubmission", () => {
     expect(result.errors.some((e) => e.field === "text")).toBe(false);
   });
 
-  it("requires a writing type", () => {
+  it("accepts a submission without a writing type", () => {
     const result = validateSubmission({
       text: "a".repeat(500),
       persona: "supportive-writing-coach",
     });
-    expect(result.errors.some((e) => e.field === "writingType")).toBe(true);
+    expect(result.errors).toHaveLength(0);
   });
 
   it("rejects an unrecognized writing type", () => {
@@ -62,12 +62,12 @@ describe("validateSubmission", () => {
     expect(result.errors.some((e) => e.field === "writingType")).toBe(true);
   });
 
-  it("requires a persona", () => {
+  it("accepts a submission without a persona", () => {
     const result = validateSubmission({
       text: "a".repeat(500),
       writingType: "essay",
     });
-    expect(result.errors.some((e) => e.field === "persona")).toBe(true);
+    expect(result.errors).toHaveLength(0);
   });
 
   it("rejects an unrecognized persona", () => {

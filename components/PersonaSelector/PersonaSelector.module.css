@@ -13,6 +13,11 @@
   margin-bottom: var(--space-3);
 }
 
+.optional {
+  color: var(--color-ink-muted);
+  font-weight: 400;
+}
+
 .options {
   display: grid;
   grid-template-columns: 1fr;

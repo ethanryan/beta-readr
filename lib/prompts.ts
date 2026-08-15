@@ -47,7 +47,11 @@ Read primarily as an engaged member of the piece's intended audience rather than
 
 function describeContext(request: ReviewRequest): string {
   const lines: string[] = [];
-  lines.push(`Writing type: ${WRITING_TYPE_LABELS[request.writingType]}`);
+  lines.push(
+    request.writingType
+      ? `Writing type: ${WRITING_TYPE_LABELS[request.writingType]}`
+      : "Writing type: Not specified. Infer the most likely form from the submission and tailor the feedback accordingly.",
+  );
   if (request.title) lines.push(`Title: ${request.title}`);
   if (request.context) lines.push(`Context from the writer: ${request.context}`);
   if (request.requestedFocus) {
