@@ -35,6 +35,14 @@ describe("InteractiveExamples", () => {
     });
   });
 
+  it("offers five public-domain examples", () => {
+    render(<InteractiveExamples />);
+
+    expect(screen.getByText(/public-domain excerpts/i)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /larsen/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /tagore/i })).toBeInTheDocument();
+  });
+
   it("carries the selected writing into the review workspace", () => {
     render(<InteractiveExamples />);
 
