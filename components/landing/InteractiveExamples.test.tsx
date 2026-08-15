@@ -43,6 +43,15 @@ describe("InteractiveExamples", () => {
     expect(screen.getByRole("button", { name: /tagore/i })).toBeInTheDocument();
   });
 
+  it("shows complete poems", () => {
+    render(<InteractiveExamples />);
+
+    fireEvent.click(screen.getByRole("button", { name: /tagore/i }));
+
+    expect(screen.getByText("The complete poem")).toBeInTheDocument();
+    expect(screen.getByText(/let my country awake/i)).toBeInTheDocument();
+  });
+
   it("carries the selected writing into the review workspace", () => {
     render(<InteractiveExamples />);
 
