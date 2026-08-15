@@ -13,11 +13,14 @@ const EXAMPLES = [
     title: "The Gettysburg Address",
     author: "Abraham Lincoln",
     form: "Speech",
+    selectionLabel: "The complete speech",
     sourceUrl:
-      "https://www.loc.gov/exhibits/gettysburg-address/ext/trans-hay-draft.html",
+      "https://www.abrahamlincolnonline.org/lincoln/speeches/gettysburg.htm",
     text: [
-      "Four score and seven years ago our fathers brought forth, upon this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal.",
-      "But, in a larger sense, we can not dedicate—we can not consecrate—we can not hallow—this ground. The brave men, living and dead, who struggled here, have consecrated it far above our poor power to add or detract. The world will little note, nor long remember what we say here, but can never forget what they did here.",
+      "Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal.",
+      "Now we are engaged in a great civil war, testing whether that nation, or any nation so conceived and so dedicated, can long endure. We are met on a great battle-field of that war. We have come to dedicate a portion of that field, as a final resting place for those who here gave their lives that that nation might live. It is altogether fitting and proper that we should do this.",
+      "But, in a larger sense, we can not dedicate—we can not consecrate—we can not hallow—this ground. The brave men, living and dead, who struggled here, have consecrated it, far above our poor power to add or detract. The world will little note, nor long remember what we say here, but it can never forget what they did here. It is for us the living, rather, to be dedicated here to the unfinished work which they who fought here have thus far so nobly advanced.",
+      "It is rather for us to be here dedicated to the great task remaining before us—that from these honored dead we take increased devotion to that cause for which they gave the last full measure of devotion—that we here highly resolve that these dead shall not have died in vain—that this nation, under God, shall have a new birth of freedom—and that government of the people, by the people, for the people, shall not perish from the earth.",
     ].join("\n\n"),
     impression:
       "The speech turns remembrance into responsibility. Its compression and repetition give a brief address unusual moral force.",
@@ -36,6 +39,7 @@ const EXAMPLES = [
     title: "Hills Like White Elephants",
     author: "Ernest Hemingway",
     form: "Short story",
+    selectionLabel: "The excerpt",
     sourceUrl: "https://www.gutenberg.org/ebooks/69683",
     text: [
       "The hills across the valley of the Ebro were long and white. On this side there was no shade and no trees and the station was between two lines of rails in the sun. …",
@@ -43,6 +47,10 @@ const EXAMPLES = [
       "“They look like white elephants,” she said.",
       "“I've never seen one,” the man drank his beer.",
       "“No, you wouldn't have.”",
+      "“I might have,” the man said. “Just because you say I wouldn’t have doesn’t prove anything.”",
+      "The girl looked at the bead curtain. “They’ve painted something on it,” she said. “What does it say?”",
+      "“Anis del Toro. It’s a drink.”",
+      "“Could we try it?”",
     ].join("\n\n"),
     impression:
       "The scene feels spare but charged. A quiet disagreement appears almost immediately beneath ordinary observations and small talk.",
@@ -61,6 +69,7 @@ const EXAMPLES = [
     title: "“Hope” is the thing with feathers",
     author: "Emily Dickinson",
     form: "Poem",
+    selectionLabel: "The complete poem",
     sourceUrl:
       "https://www.poetryfoundation.org/poems/42889/hope-is-the-thing-with-feathers-314",
     text: [
@@ -73,6 +82,11 @@ const EXAMPLES = [
       "And sore must be the storm -",
       "That could abash the little Bird",
       "That kept so many warm -",
+      "",
+      "I've heard it in the chillest land -",
+      "And on the strangest Sea -",
+      "Yet - never - in Extremity,",
+      "It asked a crumb - of me.",
     ].join("\n"),
     impression:
       "The poem makes an abstract feeling tangible without explaining it away. Its small central image carries warmth, persistence, and vulnerability at once.",
@@ -91,8 +105,14 @@ const EXAMPLES = [
     title: "Passing",
     author: "Nella Larsen",
     form: "Novel",
+    selectionLabel: "The excerpt",
     sourceUrl: "https://dpul.princeton.edu/public-domain/catalog/dcgt54m1104",
-    text: "It was the last letter in Irene Redfield’s little pile of morning mail.",
+    text:
+      "It was the last letter in Irene Redfield’s little pile of morning mail. … " +
+      "And there was, too, something mysterious and slightly furtive about it. " +
+      "A thin sly thing which bore no return address to betray the sender. " +
+      "Furtive, but yet in some peculiar, determined way a little flaunting. " +
+      "Purple ink. Foreign paper of extraordinary size.",
     impression:
       "The opening makes an ordinary letter feel charged with secrecy. Before its contents are known, its physical presence creates unease.",
     strengths: [
@@ -107,11 +127,21 @@ const EXAMPLES = [
   {
     id: "gitanjali",
     shortLabel: "Tagore",
-    title: "Gitanjali",
+    title: "Where the Mind Is Without Fear",
     author: "Rabindranath Tagore",
-    form: "Prose poem",
+    form: "Gitanjali poem",
+    selectionLabel: "The complete poem",
     sourceUrl: "https://www.gutenberg.org/ebooks/7164",
-    text: "Where the mind is without fear and the head is held high; where knowledge is free.",
+    text: [
+      "Where the mind is without fear and the head is held high;",
+      "Where knowledge is free;",
+      "Where the world has not been broken up into fragments by narrow domestic walls;",
+      "Where words come out from the depth of truth;",
+      "Where tireless striving stretches its arms towards perfection;",
+      "Where the clear stream of reason has not lost its way into the dreary desert sand of dead habit;",
+      "Where the mind is led forward by thee into ever-widening thought and action—",
+      "Into that heaven of freedom, my Father, let my country awake.",
+    ].join("\n"),
     impression:
       "The poem presents freedom as a condition of both public life and private thought. Its plain syntax gives the aspiration clarity and urgency.",
     strengths: [
@@ -188,7 +218,7 @@ export function InteractiveExamples() {
           <article className={styles.writing}>
             <div className={styles.pieceHeader}>
               <div>
-                <p className={styles.kicker}>The excerpt</p>
+                <p className={styles.kicker}>{selected.selectionLabel}</p>
                 <h3 className={styles.pieceTitle}>{selected.title}</h3>
                 <p className={styles.byline}>by {selected.author}</p>
               </div>
