@@ -1,0 +1,52 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { InteractiveExamples } from "./InteractiveExamples";
+import { HOMEPAGE_DRAFT_KEY } from "@/lib/draftTransfer";
+
+const { push, track } = vi.hoisted(() => ({
+  push: vi.fn(),
+  track: vi.fn(),
+}));
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ push }),
+}));
+
+vi.mock("@/lib/analytics", () => ({ track }));
+
+describe("InteractiveExamples", () => {
+  beforeEach(() => {
+    push.mockReset();
+    track.mockReset();
+    sessionStorage.clear();
+  });
+
+  it("switches between saved example reviews", () => {
+    render(<InteractiveExamples />);
+
+    fireEvent.click(screen.getByRole("button", { name: /dickinson/i }));
+
+    expect(
+      screen.getByRole("heading", { name: /hope.*thing with feathers/i }),
+    ).toBeInTheDocument();
+    expect(track).toHaveBeenCalledWith({
+      name: "example_selected",
+      example: "hope-is-the-thing-with-feathers",
+    });
+  });
+
+  it("carries the selected writing into the review workspace", () => {
+    render(<InteractiveExamples />);
+
+    fireEvent.click(screen.getByRole("button", { name: /hemingway/i }));
+    fireEvent.click(
+      screen.getByRole("button", { name: /try this writing yourself/i }),
+    );
+
+    const savedDraft = JSON.parse(
+      sessionStorage.getItem(HOMEPAGE_DRAFT_KEY) ?? "{}",
+    );
+    expect(savedDraft.pastedText).toContain("white elephants");
+    expect(push).toHaveBeenCalledWith("/review");
+  });
+});
