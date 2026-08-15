@@ -8,6 +8,8 @@ import posthog from "posthog-js";
 export type AnalyticsEvent =
   | { name: "landing_cta_clicked" }
   | { name: "review_started" }
+  | { name: "example_selected"; example: string }
+  | { name: "example_review_started"; example: string }
   | { name: "input_method_selected"; method: "paste" | "upload" }
   | { name: "file_uploaded"; fileType: string }
   | { name: "file_upload_failed"; reason: string }

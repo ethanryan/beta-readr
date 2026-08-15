@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Hero } from "@/components/landing/Hero";
+import { InteractiveExamples } from "@/components/landing/InteractiveExamples";
 import { HowItWorks } from "@/components/landing/HowItWorks";
 import { WhatWeReview } from "@/components/landing/WhatWeReview";
 import { Philosophy } from "@/components/landing/Philosophy";
@@ -18,6 +19,7 @@ export default function Home() {
   return (
     <>
       <Hero />
+      <InteractiveExamples />
       <HowItWorks />
       <WhatWeReview />
       <Philosophy />
