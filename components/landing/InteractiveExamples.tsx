@@ -85,6 +85,44 @@ const EXAMPLES = [
     revisionLens:
       "The familiar bird metaphor risks becoming sentimental, but the severity of “sore must be the storm” supplies useful resistance.",
   },
+  {
+    id: "passing",
+    shortLabel: "Larsen",
+    title: "Passing",
+    author: "Nella Larsen",
+    form: "Novel",
+    sourceUrl: "https://dpul.princeton.edu/public-domain/catalog/dcgt54m1104",
+    text: "It was the last letter in Irene Redfield’s little pile of morning mail.",
+    impression:
+      "The opening makes an ordinary letter feel charged with secrecy. Before its contents are known, its physical presence creates unease.",
+    strengths: [
+      "Beginning with the last item in a pile gives the letter immediate narrative importance.",
+      "The precise domestic detail creates a calm surface for the tension that follows.",
+    ],
+    readerExperience:
+      "A reader is invited to share Irene’s attention and wonder why this particular letter matters.",
+    revisionLens:
+      "The opening withholds context deliberately. A writer using this approach should ensure each new detail sharpens, rather than merely delays, the central question.",
+  },
+  {
+    id: "gitanjali",
+    shortLabel: "Tagore",
+    title: "Gitanjali",
+    author: "Rabindranath Tagore",
+    form: "Prose poem",
+    sourceUrl: "https://www.gutenberg.org/ebooks/7164",
+    text: "Where the mind is without fear and the head is held high; where knowledge is free.",
+    impression:
+      "The poem presents freedom as a condition of both public life and private thought. Its plain syntax gives the aspiration clarity and urgency.",
+    strengths: [
+      "The opening joins emotional courage with physical posture, making an abstract ideal visible.",
+      "The movement from the individual mind to freely shared knowledge quickly widens the poem’s scope.",
+    ],
+    readerExperience:
+      "A reader encounters the passage as both a wish and a standard against which the present world can be measured.",
+    revisionLens:
+      "The language is intentionally universal. A contemporary writer might consider when a concrete image would deepen an otherwise abstract appeal.",
+  },
 ] as const;
 
 type ExampleId = (typeof EXAMPLES)[number]["id"];
@@ -124,6 +162,10 @@ export function InteractiveExamples() {
           <p className={styles.support}>
             Choose a familiar piece to see the kind of thoughtful, specific
             feedback betaReadr provides.
+          </p>
+          <p className={styles.selectionNote}>
+            These public-domain excerpts were chosen to represent different
+            forms, styles, and perspectives.
           </p>
         </div>
 
