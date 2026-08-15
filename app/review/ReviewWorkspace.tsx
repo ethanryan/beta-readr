@@ -187,12 +187,6 @@ export function ReviewWorkspace() {
                 Make any changes you like, then request updated feedback. Your
                 existing feedback remains below while you edit.
               </p>
-              {feedbackIsOutdated && (
-                <p className={styles.outdatedNotice} role="status">
-                  This feedback is based on an earlier version. Get updated
-                  feedback when you are ready.
-                </p>
-              )}
               <FeedbackForm
                 initialValues={formValues}
                 isSubmitting={false}
@@ -200,6 +194,12 @@ export function ReviewWorkspace() {
                 onValuesChange={setFormValues}
                 onSubmit={handleFormSubmit}
               />
+              {feedbackIsOutdated && (
+                <p className={styles.outdatedNotice} role="status">
+                  This feedback is based on an earlier version. Get updated
+                  feedback when you are ready.
+                </p>
+              )}
             </div>
           )}
           <FeedbackDisplay
