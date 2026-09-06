@@ -2,11 +2,11 @@
 
 **AI feedback without AI ghostwriting.**
 
-betaReadr gives writers thoughtful, workshop-style feedback on their
-writing — fiction, novel chapters, essays, memoir, poetry, blog posts,
-LinkedIn posts, professional writing, and more. It identifies what's
-working, what's unclear, and where a piece could get stronger, without
-rewriting the work for you.
+betaReadr is a virtual writing workshop for fiction, novel chapters,
+essays, memoir, poetry, blog posts, LinkedIn posts, professional writing,
+and more. Thoughtful readers with distinct perspectives help writers see
+what's working, what's unclear, and where a piece could get stronger,
+without rewriting the work for them.
 
 ## Product philosophy
 
@@ -202,15 +202,16 @@ types/
 
 ## Roadmap (not built yet)
 
-Accounts and authentication · saved submissions and review history ·
-multiple personas reviewing one piece · side-by-side feedback from
-different readers · comments on specific passages · longer manuscripts
-and chapter-by-chapter projects · subscription plans and usage limits ·
-payments via Stripe · a human beta-reader marketplace · shared
-workshop groups · classroom workspaces · export to PDF/document
-formats · follow-up questions about feedback · writer progress
-tracking · private team workspaces · reader profiles · custom feedback
-personas.
+A paid virtual workshop with several distinct readers reviewing one
+piece · side-by-side feedback and a synthesis of where readers agree
+or disagree · Vercel AI Gateway support for multiple model providers ·
+accounts and authentication · saved submissions and review history ·
+persistent readers who respond to a writer's work over time · comments
+on specific passages · longer manuscripts and chapter-by-chapter
+projects · payments and usage limits · a human beta-reader marketplace ·
+shared workshop groups · classroom workspaces · export to PDF/document
+formats · follow-up questions about feedback · writer progress tracking ·
+private team workspaces · reader profiles · custom feedback personas.
 
 ## Creating the GitHub repository and pushing
 
