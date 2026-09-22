@@ -9,8 +9,9 @@ export function Hero() {
           <p className={styles.eyebrow}>betaReadr</p>
           <h1 className={styles.headline}>Better feedback for better writing.</h1>
           <p className={styles.support}>
-            Thoughtful, workshop-style feedback to help you strengthen your
-            writing without rewriting it for you.
+            Your virtual writing workshop: thoughtful readers with distinct
+            perspectives helping you see what works, what does not, and where
+            your writing could grow.
           </p>
           <p className={styles.philosophy}>
             AI feedback without AI ghostwriting.

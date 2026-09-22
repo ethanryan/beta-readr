@@ -12,7 +12,7 @@ import { ClosingCta } from "@/components/landing/ClosingCta";
 export const metadata: Metadata = {
   title: "betaReadr | AI Feedback Without AI Ghostwriting",
   description:
-    "Get thoughtful, workshop-style feedback on your writing. betaReadr identifies strengths, weaknesses, reader reactions, and revision priorities without rewriting your work.",
+    "A virtual writing workshop with thoughtful readers and distinct perspectives. Discover what works, what does not, and where your writing could grow—without rewriting your work.",
 };
 
 export default function Home() {
